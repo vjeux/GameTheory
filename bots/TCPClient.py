@@ -1,3 +1,5 @@
+# http://effbot.org/zone/socket-intro.htm
+
 import socket, string
 
 CRLF = "\r\n"

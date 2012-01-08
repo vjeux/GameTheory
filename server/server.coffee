@@ -51,18 +51,18 @@ game = ->
 		((players, callback) ->
 			send players, ['Prisonnier']
 			query players, (player.name for player in players)...,
-			((client) ->
-				client.answer = {}
-				for player in players
-					client.answer[player.name] = 'C'
-			),
-			((client, answers) ->
-				for answer_str in answers.split ' '
-					[name, answer] = answer_str.split '='
-					if name of client.answer and (answer == 'C' or answer == 'T')
-						client.answer[name] = answer
-			),
-			callback
+				((client) ->
+					client.answer = {}
+					for player in players
+						client.answer[player.name] = 'C'
+				),
+				((client, answers) ->
+					for answer_str in answers.split ' '
+						[name, answer] = answer_str.split '='
+						if name of client.answer and (answer == 'C' or answer == 'T')
+							client.answer[name] = answer
+				),
+				callback
 		),
 		((players, callback) ->
 			console.log player.answer for player in players
