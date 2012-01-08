@@ -20,7 +20,7 @@ Game Theory
 < Gauth-1=10 Vjeux-0=10 Felix-2=10 # We receive Gauth-1 share of the bounty
 > T # We do not agree, we decide to betray him
 
-< Pirate
+< Pirate # Gauth-0 has died, another round of Pirate
 < 30 Vjeux-0 Felix-2 # We are now the leader
 > Vjeux-0=30 Felix-2=0 # We send the shares
 
