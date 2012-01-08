@@ -42,7 +42,7 @@ Example
 Messages
 ========
 
-* There's a \r\n at the end of each message.
+* There's a ```\r\n``` at the end of each message.
 * Multiple arguments are space separated (1 or more) and key-values are separated by an ```=``` character.
 * If you send a non-valid message, timeout, disconnected... You are going to get assigned a default value.
   * **Name**: ```Unnammed```.
