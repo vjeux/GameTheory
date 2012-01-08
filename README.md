@@ -29,7 +29,7 @@ Game Theory
 < Prisonnier # Another round of Prisonnier
 < Vjeux-0 Felix-2 # Gauth-1 has been kicked for a round
 > Felix-2=T # We betray Felix
-< Felix-1=T # He betrays us too
+< Felix-2=T # He betrays us too
 
 < 0 # We receive a bounty of 0. There is no Pirate round since we are alone in our group.
 
