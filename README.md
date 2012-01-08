@@ -1,5 +1,7 @@
 Game Theory
 
+Example
+=======
 
 ```ruby
 # Players: Vjeux, Gauth, Felix
@@ -36,3 +38,14 @@ Game Theory
 < End # There was only 2 Prisonnier round
 < Vjeux-0=30 Felix-2=0 Gauth-1=0 # We receive the scores of everyone
 ```
+
+Messages
+========
+
+* There's a \r\n at the end of each message.
+* Multiple arguments are space separated (1 or more) and key-values are separated by an '=' character.
+* If you send a non-valid message, timeout, disconnected... You are going to get assigned a default value
+  * **Name**: ```Unnammed```
+  * **Prisonnier**: You betray everyone ```T``` by default
+  * **Pirate-Leader**: You give all the bounty to yourself, nothing for the others
+  * **Pirate-Non-Leader**: You cooperate ```C``` with the leader
