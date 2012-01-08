@@ -33,7 +33,7 @@ Example
 
 < Prisonnier # Another round of Prisonnier
 < Vjeux-0 Felix-2 # Gauth-1 has been kicked for a round
-> Felix-2=T # We betray Felix
+> Felix-2=T # We betray Felix-2
 < Felix-2=T # He betrays us too
 
 < 0 # There is no Pirate round since we are alone in our group. We receive a bounty of 0.
