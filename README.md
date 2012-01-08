@@ -1,4 +1,7 @@
 Game Theory
+===========
+
+In order to start your implementation, you can use the dumb bot [Bot_Coop.py](https://github.com/vjeux/GameTheory/blob/master/bots/bot_coop.py) as a base. It's written in Python.
 
 Example
 =======
