@@ -29,14 +29,14 @@ Example
 < 30 Vjeux-0 Felix-2 # We are now the leader
 > Vjeux-0=30 Felix-2=0 # We send the shares
 
-< 30 # We gain the full prize!
+< 30 # We win the full bounty!
 
 < Prisonnier # Another round of Prisonnier
 < Vjeux-0 Felix-2 # Gauth-1 has been kicked for a round
 > Felix-2=T # We betray Felix
 < Felix-2=T # He betrays us too
 
-< 0 # We receive a bounty of 0. There is no Pirate round since we are alone in our group.
+< 0 # There is no Pirate round since we are alone in our group. We receive a bounty of 0.
 
 < End # There was only 2 Prisonnier round
 < Vjeux-0=30 Felix-2=0 Gauth-1=0 # We receive the scores of everyone
@@ -47,7 +47,7 @@ Messages
 
 * There's a ```\r\n``` at the end of each message.
 * Multiple arguments are space separated and key-values are separated by an ```=``` character.
-* If you send a non-valid message, timeout, disconnected... You are going to get assigned a default value.
+* If you send a non-valid message, timeout, disconnect... You are going to get assigned a default value.
   * **Name**: ```Unnammed```.
   * **Prisonnier**: You betray ```T``` everyone by default.
   * **Pirate-Leader**: You give all the bounty to yourself, nothing for the others.
