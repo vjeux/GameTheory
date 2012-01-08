@@ -22,7 +22,9 @@ query = (clients, msg..., init, update, callback) ->
 		init(client)
 
 		client.socket.once 'data', (data) ->
-			update(client, data.toString()[0...-2])
+			data = data.toString()[0...-2]
+			console.log '<', data, ids([client])
+			update(client, data)
 			answer()
 
 		client.socket.write msg + '\r\n'
@@ -60,7 +62,6 @@ game = ->
 						client.answer[player.name] = 'T'
 				),
 				((client, answers) ->
-					console.log '<', answers, ids([client])
 					for answer_str in answers.split ' '
 						[name, answer] = answer_str.split '='
 						if name of client.answer and (answer == 'C' or answer == 'T')
@@ -84,7 +85,48 @@ game = ->
 					if a != b and a.answer[b.name] == b.answer[a.name] == 'C'
 						UnionFind.union(a, b)
 
-			console.log UnionFind.components players
+			async.parallel (UnionFind.components players).map((players) ->
+				(callback) ->
+					players.sort (x, y) -> 0.5 - Math.random()
+					players.sort (x, y) -> x.score - y.score
+					bounty = 10
+					send players, 'Pirate'
+					send players, bounty, (player.name for player in players)...
+
+					async.series [
+						((callback) ->
+							query [player[0]], [bounty, (player.name for player in players)...]...,
+								(reset = (client) ->
+									for player, id in players
+										player.share = if id == 0 then bounty else 0
+								),
+								((client, answers) ->
+									for answer_str in answers.split ' '
+										[name, answer] = answer_str.split '='
+										players.forEach (player) ->
+											if player.name == name and isInt +answer
+												player.share = +answer
+									if (player.share for player in players).sum() != bounty
+										reset()
+								),
+								callback
+						),
+						((callback) ->
+							player[0].answer = 'C'
+							query players[1...], [bounty, (player.name + '=' + player.share for player in players)...]...,
+								((client) ->
+									client.answer = 'C'
+								),
+								((client, answer) ->
+									if answer == 'T' or answer == 'C'
+										client.answer = answer
+								),
+								callback
+						)
+					], callback
+			), callback
+
+			console.log
 		)
 	]
 

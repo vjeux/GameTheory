@@ -35,9 +35,12 @@ while 1:
 	write("BotCoop")
 	myself = readString()
 
-	game = readString()
+
 	# Prisonnier
-	if game == 'Prisonnier':
+	while 1:
+		game = readString()
+		if game != 'Prisonnier':
+			break
 
 		# Receive Players
 		players = read()
@@ -57,5 +60,12 @@ while 1:
 
 		# Receive what other said against me
 		read()
+
+		while 1:
+			game = readString()
+			if game != 'Pirate':
+				break
+
+			read()
 
 	break
