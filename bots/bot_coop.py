@@ -8,14 +8,17 @@ from TCPClient import TCPClient
 TCP = TCPClient('127.0.0.1', 1337)
 
 def readString():
-	return TCP.readline()
+	str = TCP.readline()
+	print '<', str
+	return str
 
 def read():
-	return TCP.readline().split(' ')
+	return readString().split(' ')
 
 def write(str):
 	if isinstance(str, (list, tuple)):
 		str = ' '.join(str)
+	print '>', str
 	TCP.writeline(str)
 
 
@@ -23,15 +26,14 @@ def write(str):
 #         Game Code         #
 # # # # # # # # # # # # # # #
 
-print readString() # Welcome
+readString() # Welcome
 
 while 1:
-	print readString() # Start
+	readString() # Start
 
 	# Name
 	write("BotCoop")
 	myself = readString()
-	print 'My Name:', myself
 
 	game = readString()
 	# Prisonnier
@@ -39,7 +41,6 @@ while 1:
 
 		# Receive Players
 		players = read()
-		print 'Players:', players
 
 		# Send T / C
 		msg = []
@@ -49,11 +50,12 @@ while 1:
 					action = 'C'
 				else:
 					action = 'T'
-
+				action = 'C'
 				msg.append('%s=%s' % (player, action))
 
-		print msg
 		write(msg)
 
+		# Receive what other said against me
+		read()
 
 	break
