@@ -46,6 +46,6 @@ Messages
 * Multiple arguments are space separated and key-values are separated by an ```=``` character.
 * If you send a non-valid message, timeout, disconnected... You are going to get assigned a default value.
   * **Name**: ```Unnammed```.
-  * **Prisonnier**: You betray everyone ```T``` by default.
+  * **Prisonnier**: You betray ```T``` everyone by default.
   * **Pirate-Leader**: You give all the bounty to yourself, nothing for the others.
   * **Pirate-Non-Leader**: You cooperate ```C``` with the leader.
