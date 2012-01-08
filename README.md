@@ -17,8 +17,8 @@ Example
 
 < Prisonnier # Let's start a Prisonnier round
 < Vjeux-0 Gauth-1 Felix-2 # We receive the list of players
-> Gauth-1=T Felix-2=C # We send our decision about all the players
-< Gauth-1=T Felix-2=T # We receive the decision of all the players about us
+> Gauth-1=C Felix-2=C # We send our decision about all the players
+< Gauth-1=T Felix-2=C # We receive the decision of all the players about us
 
 < Pirate # Let's start a Pirate round
 < 30 Gauth-1 Vjeux-0 Felix-2 # We receive the bounty along with the players sorted by hierarchy
