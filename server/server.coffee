@@ -203,10 +203,10 @@ game = ->
 
 
 
-if process.argv.length == 3:
+if process.argv.length == 3
 	ip = process.argv[1]
-	port = +process.[2]
-else:
+	port = +process.argv[2]
+else
 	ip = '127.0.0.1'
 	port = 1337
 
