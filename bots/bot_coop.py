@@ -1,12 +1,18 @@
-from random import random
-from time import sleep
-
 # # # # # # # # # # # # # # #
-#   Socket Implementation   #
+#      Socket Helpers       #
 # # # # # # # # # # # # # # #
 
+from sys import argv
 from TCPClient import TCPClient
-TCP = TCPClient('127.0.0.1', 1337)
+
+if len(argv) == 3:
+	ip = argv[1]
+	port = int(argv[2])
+else:
+	ip = '127.0.0.1'
+	port = 1337
+
+TCP = TCPClient(ip, port)
 
 def readString():
 	str = TCP.readline()
@@ -27,6 +33,8 @@ def write(str):
 #         Game Code         #
 # # # # # # # # # # # # # # #
 
+from random import random
+
 readString() # Welcome
 
 while 1:
@@ -37,7 +45,6 @@ while 1:
 	# Name
 	write("BotCoop")
 	myself = readString()
-
 
 	# Prisonnier Game
 	while readString() == 'Prisonnier':
@@ -54,7 +61,7 @@ while 1:
 					action = 'C'
 				else:
 					action = 'T'
-				action = 'C' # debug
+
 				msg.append('%s=%s' % (player, action))
 		write(msg)
 

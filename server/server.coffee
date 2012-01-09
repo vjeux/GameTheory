@@ -201,7 +201,16 @@ game = ->
 		) # f
 	] # waterfall
 
-server.listen 1337, '127.0.0.1'
+
+
+if process.argv.length == 3:
+	ip = process.argv[1]
+	port = +process.[2]
+else:
+	ip = '127.0.0.1'
+	port = 1337
+
+server.listen port, ip
 
 console.log 'Press Enter to Start a Game!'
 
