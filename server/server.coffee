@@ -202,10 +202,9 @@ game = ->
 	] # waterfall
 
 
-
-if process.argv.length == 3
-	ip = process.argv[1]
-	port = +process.argv[2]
+if process.argv.length == 4
+	ip = process.argv[2]
+	port = +process.argv[3]
 else
 	ip = '127.0.0.1'
 	port = 1337
