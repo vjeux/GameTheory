@@ -10,7 +10,7 @@ Installation:
 
 ```bash
 # NodeJS + NPM + CoffeeScript
-sudo apt-get install nodejs # https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
+sudo apt-get install nodejs #https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 curl http://npmjs.org/install.sh | sudo sh
 sudo npm install -g coffee-script
 
