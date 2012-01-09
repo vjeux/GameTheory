@@ -65,7 +65,7 @@ game = ->
 
 	all_players = clients.filter((client) -> client.alive).concat()
 	players = all_players.concat()
-	rounds = 1
+	rounds = 5
 
 	async.waterfall [
 		((callback) ->

@@ -56,11 +56,8 @@ while 1:
 		msg = []
 		for player in players:
 			if player != myself:
-				# We don't know who to trust ... Let's use Random!
-				if random() > 0.5:
-					action = 'C'
-				else:
-					action = 'T'
+				# Everybody is our friend
+				action = 'C'
 
 				msg.append('%s=%s' % (player, action))
 		write(msg)
@@ -74,7 +71,7 @@ while 1:
 
 			# Receive players and bounty
 			data = readArray()
-			bounty = data[0] # bounty = 42
+			bounty = int(data[0]) # bounty = 42
 			players = data[1:] # players = [ 'Player-1', 'Player-2', ... ]
 			# Note: players are sorted by hierarchy, the first is the leader.
 
@@ -108,5 +105,5 @@ while 1:
 		score += int(readString())
 
 	# Game is over, get the final scores
-	scores = dict(x.split('=') for x in readArray())
+	scores = dict((x.split('=')[0], int(x.split('=')[1])) for x in readArray())
 	# scores = { 'Player-1' : 100, 'Player-2' : 23, 'Player-3' : 0, ... }
