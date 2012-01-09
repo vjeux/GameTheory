@@ -23,7 +23,7 @@ cd ..
 
 Usage:
 
-```bash```
+```bash
 # ./run.sh <# of the process to get stdout from> <processes ...>
 ./run.sh 0 bots/bot_coop.py bots/bot_coop.py bots/bot_coop.py
 ```
