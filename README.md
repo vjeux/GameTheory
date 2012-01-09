@@ -29,6 +29,7 @@ Example
 < 30 Vjeux-0 Felix-2 # We are now the leader
 > Vjeux-0=30 Felix-2=0 # We send the shares
 
+< EndPirate
 < 30 # We win the full bounty!
 
 < Prisonnier # Another round of Prisonnier
@@ -36,9 +37,10 @@ Example
 > Felix-2=T # We betray Felix-2
 < Felix-2=T # He betrays us too
 
+< EndPirate
 < 0 # There is no Pirate round since we are alone in our group. We receive a bounty of 0.
 
-< End # There was only 2 Prisonnier round
+< EndPrisonnier # There was only 2 Prisonnier round
 < Vjeux-0=30 Felix-2=0 Gauth-1=0 # We receive the scores of everyone
 ```
 
