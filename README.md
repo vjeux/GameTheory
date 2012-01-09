@@ -3,6 +3,34 @@ Game Theory
 
 In order to start your implementation, you can use the dumb bot [Bot_Coop.py](https://github.com/vjeux/GameTheory/blob/master/bots/bot_coop.py) as a base. It's written in Python.
 
+Installation
+============
+
+Installation:
+
+```bash
+# NodeJS + NPM + CoffeeScript
+apt-get install nodejs
+curl http://npmjs.org/install.sh | sh
+npm install coffeescript
+
+# Code + Dependencies
+git clone git@github.com:vjeux/GameTheory.git
+cd GameTheory/server
+npm install async sugar
+cd ..
+```
+
+Usage:
+
+```bash```
+Terminal1> coffee server/server.coffee
+Terminal2> python python bots/bot_coop.py
+Terminal3> python python bots/bot_coop.py
+Terminal4> python python bots/bot_coop.py
+Terminal1> ** Press Enter **
+```
+
 Example
 =======
 
@@ -54,3 +82,4 @@ Messages
   * **Prisonnier**: You betray ```T``` everyone by default.
   * **Pirate-Leader**: You give all the bounty to yourself, nothing for the others.
   * **Pirate-Non-Leader**: You cooperate ```C``` with the leader.
+
