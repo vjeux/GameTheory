@@ -12,7 +12,7 @@ Installation:
 # NodeJS + NPM + CoffeeScript
 sudo apt-get install nodejs
 curl http://npmjs.org/install.sh | sh
-npm install coffeescript
+sudo npm install -g coffeescript
 
 # Code + Dependencies
 git clone git://github.com/vjeux/GameTheory.git
