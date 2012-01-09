@@ -21,11 +21,17 @@ npm install async sugar
 cd ..
 ```
 
-Usage:
+Local development:
 
 ```bash
 # ./run.sh <# of the process to get stdout from> <processes ...>
 ./run.sh 0 bots/bot_coop.py bots/bot_coop.py bots/bot_coop.py
+```
+
+Test your bot against the others (ping me if the server isn't up):
+
+```bash
+python bots/yourbot.py fooo.fr 1337
 ```
 
 Example
