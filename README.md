@@ -15,7 +15,7 @@ curl http://npmjs.org/install.sh | sh
 npm install coffeescript
 
 # Code + Dependencies
-git clone git@github.com:vjeux/GameTheory.git
+git clone git://github.com/vjeux/GameTheory.git
 cd GameTheory/server
 npm install async sugar
 cd ..
