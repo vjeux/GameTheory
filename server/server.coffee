@@ -58,7 +58,11 @@ send = (clients, msg...) ->
 		if client.alive
 			client.socket.write msg + '\r\n'
 
+inGame = false
 game = ->
+	return if (inGame)
+	inGame = true
+
 	all_players = clients.filter((client) -> client.alive).concat()
 	players = all_players.concat()
 	rounds = 1
@@ -193,10 +197,9 @@ game = ->
 			players = all_players.concat()
 			send players, 'EndPrisonnier'
 			send players, (player.name + '=' + player.score for player in players)...
+			inGame = false
 		) # f
-	], # waterfall
-	(callback) ->
-		console.log 'End of the game'
+	] # waterfall
 
 server.listen 1337, '127.0.0.1'
 
@@ -205,5 +208,4 @@ console.log 'Press Enter to Start a Game!'
 readline = require 'readline'
 rl = readline.createInterface process.stdin, process.stdout
 rl.on 'line', (line) ->
-	console.log 'Starting game!'
 	game()
