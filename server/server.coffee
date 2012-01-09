@@ -2,14 +2,17 @@ net = require 'net'
 async = require 'async'
 UnionFind = require './unionfind.coffee'
 
+Array::sum = -> @reduce ((a, b) -> a + b), 0
+isInt = (x) -> typeof x == 'number' and x % 1 == 0
+
 client_id = 0
 clients = []
 server = net.createServer (socket) ->
 	client = {id: client_id++, socket, toString: -> @name ? @id}
 	clients.push client
-	socket.write 'Welcome! Please wait for a new game to start.\r\n'
+	send [client], 'Welcome! Please wait for a new game to start.'
 
-query = (clients, msg..., init, update, callback) ->
+query = (clients, msg, init, update, callback) ->
 	msg = msg.join(' ')
 	console.log '>', msg, ids(clients)
 
@@ -55,7 +58,7 @@ game = ->
 		),
 		((players, callback) ->
 			send players, ['Prisonnier']
-			query players, (player.name for player in players)...,
+			query players, (player.name for player in players),
 				((client) ->
 					client.answer = {}
 					for player in players
@@ -89,44 +92,69 @@ game = ->
 				(callback) ->
 					players.sort (x, y) -> 0.5 - Math.random()
 					players.sort (x, y) -> x.score - y.score
-					bounty = 10
-					send players, 'Pirate'
-					send players, bounty, (player.name for player in players)...
 
-					async.series [
-						((callback) ->
-							query [player[0]], [bounty, (player.name for player in players)...]...,
-								(reset = (client) ->
-									for player, id in players
-										player.share = if id == 0 then bounty else 0
-								),
-								((client, answers) ->
-									for answer_str in answers.split ' '
-										[name, answer] = answer_str.split '='
-										players.forEach (player) ->
-											if player.name == name and isInt +answer
-												player.share = +answer
-									if (player.share for player in players).sum() != bounty
-										reset()
-								),
-								callback
-						),
-						((callback) ->
-							player[0].answer = 'C'
-							query players[1...], [bounty, (player.name + '=' + player.share for player in players)...]...,
-								((client) ->
-									client.answer = 'C'
-								),
-								((client, answer) ->
-									if answer == 'T' or answer == 'C'
-										client.answer = answer
-								),
-								callback
-						)
-					], callback
+					Table =
+						TT: 0, TC: 1
+						CT: 3, CC: 5
+
+					bounty = (for a in players
+						(for b in players
+							Table[a.answer[b.name] + b.answer[a.name]]).sum()
+					).sum()
+
+					isLeaderKilled = true
+
+					async.whilst (-> isLeaderKilled), ->
+						send players, 'Pirate'
+						send players[1...], bounty, (player.name for player in players)...
+
+						async.waterfall [
+							((callback) ->
+								query [players[0]], [bounty, (player.name for player in players)...],
+									(reset = (client) ->
+										for player, id in players
+											player.share = if id == 0 then bounty else 0
+									),
+									((client, answers) ->
+										for answer_str in answers.split ' '
+											[name, answer] = answer_str.split '='
+											players.forEach (player) ->
+												if player.name == name and isInt +answer
+													player.share = +answer
+										if (player.share for player in players).sum() != bounty
+											reset()
+									),
+									callback
+							),
+							((leader, callback) ->
+								players[0].answer = 'C'
+								query players[1...], (player.name + '=' + player.share for player in players),
+									((client) ->
+										client.answer = 'C'
+									),
+									((client, answer) ->
+										if answer == 'T' or answer == 'C'
+											client.answer = answer
+									),
+									callback
+							),
+							((nonleaders, callback) ->
+								dead = ((if player.answer == 'C' then 1 else 0) for player in players).sum()
+								alive = players.length - dead
+
+								isLeaderKilled = dead > alive
+								if isLeaderKilled
+									send [players[0]], 'EndPirate'
+									send [players[0]], 0
+									players = players[1...]
+								else
+									for player in players
+										send [player], 'EndPirate'
+										send [player], player.share
+										player.score += player.share
+							)
+						], callback
 			), callback
-
-			console.log
 		)
 	]
 
