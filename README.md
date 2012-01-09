@@ -25,9 +25,9 @@ Usage:
 
 ```bash```
 Terminal1> coffee server/server.coffee
-Terminal2> python python bots/bot_coop.py
-Terminal3> python python bots/bot_coop.py
-Terminal4> python python bots/bot_coop.py
+Terminal2> python bots/bot_coop.py
+Terminal3> python bots/bot_coop.py
+Terminal4> python bots/bot_coop.py
 Terminal1> ** Press Enter **
 ```
 
