@@ -1,4 +1,5 @@
 from random import random
+from time import sleep
 
 # # # # # # # # # # # # # # #
 #   Socket Implementation   #
@@ -12,7 +13,7 @@ def readString():
 	print '<', str
 	return str
 
-def read():
+def readArray():
 	return readString().split(' ')
 
 def write(str):
@@ -42,7 +43,7 @@ while 1:
 	while readString() == 'Prisonnier':
 
 		# Receive Players
-		players = read()
+		players = readArray()
 
 		# Send T / C
 		msg = []
@@ -58,14 +59,14 @@ while 1:
 		write(msg)
 
 		# Receive what the others said about me
-		actions = dict(x.split('=') for x in read())
+		actions = dict(x.split('=') for x in readArray())
 		# actions = { 'Player-1' : 'C', 'Player-2' : 'T', ... }
 
 		# Pirate Game
 		while readString() == 'Pirate':
 
 			# Receive players and bounty
-			data = read()
+			data = readArray()
 			bounty = data[0] # bounty = 42
 			players = data[1:] # players = [ 'Player-1', 'Player-2', ... ]
 			# Note: players are sorted by hierarchy, the first is the leader.
@@ -86,7 +87,7 @@ while 1:
 
 			# We are not the leader, let's see if we accept the share
 			else:
-				shares = dict((x.split('=')[0], int(x.split('=')[1])) for x in read())
+				shares = dict((x.split('=')[0], int(x.split('=')[1])) for x in readArray())
 				# shares = { 'Player-1' : 50, 'Player-2' : 10, 'Player-3' : 0, ... }
 
 				if shares[myself] > 0: # If we are given something, we cooperate
@@ -100,5 +101,5 @@ while 1:
 		score += int(readString())
 
 	# Game is over, get the final scores
-	scores = dict(x.split('=') for x in read())
+	scores = dict(x.split('=') for x in readArray())
 	# scores = { 'Player-1' : 100, 'Player-2' : 23, 'Player-3' : 0, ... }
