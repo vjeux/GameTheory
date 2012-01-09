@@ -24,11 +24,7 @@ cd ..
 Usage:
 
 ```bash```
-Terminal1> coffee server/server.coffee
-Terminal2> python bots/bot_coop.py
-Terminal3> python bots/bot_coop.py
-Terminal4> python bots/bot_coop.py
-Terminal1> ** Press Enter **
+./run.sh 0 bots/bot_coop.py bots/bot_coop.py bots/bot_coop.py
 ```
 
 Example
