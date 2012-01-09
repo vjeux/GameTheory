@@ -10,7 +10,7 @@ Installation:
 
 ```bash
 # NodeJS + NPM + CoffeeScript
-apt-get install nodejs
+sudo apt-get install nodejs
 curl http://npmjs.org/install.sh | sh
 npm install coffeescript
 
