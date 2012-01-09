@@ -102,5 +102,3 @@ while 1:
 	# Game is over, get the final scores
 	scores = dict(x.split('=') for x in read())
 	# scores = { 'Player-1' : 100, 'Player-2' : 23, 'Player-3' : 0, ... }
-
-	break

@@ -1,8 +1,8 @@
 net = require 'net'
 async = require 'async'
 UnionFind = require './unionfind.coffee'
+require 'sugar'
 
-Array::sum = -> @reduce ((a, b) -> a + b), 0
 isInt = (x) -> typeof x == 'number' and x % 1 == 0
 
 client_id = 0
@@ -19,7 +19,7 @@ query = (clients, msg, init, update, callback) ->
 	n = clients.length
 	answer = ->
 		if --n == 0
-			callback null, clients
+			callback null
 
 	clients.forEach (client) ->
 		init(client)
@@ -43,6 +43,9 @@ send = (clients, msg...) ->
 
 game = ->
 	players = clients.concat()
+	swimming = []
+	rounds = 3
+
 	async.waterfall [
 		((callback) ->
 			query players, ['Start'],
@@ -56,111 +59,130 @@ game = ->
 				),
 				callback
 		),
-		((players, callback) ->
-			send players, ['Prisonnier']
-			query players, (player.name for player in players),
-				((client) ->
-					client.answer = {}
-					for player in players
-						client.answer[player.name] = 'T'
-				),
-				((client, answers) ->
-					for answer_str in answers.split ' '
-						[name, answer] = answer_str.split '='
-						if name of client.answer and (answer == 'C' or answer == 'T')
-							client.answer[name] = answer
-				),
-				callback
-		),
-		((players, callback) ->
-			for player in players
-				send [player], (
-					for other in players
-						if other != player
-							other.name + '=' + other.answer[player.name]
-				).filter (x) -> x
+		((callback) ->
+			async.whilst (-> rounds-- > 0), ((callback) ->
+				console.log rounds
+				async.waterfall [
+					((callback) ->
+						send players, ['Prisonnier']
+						query players, (player.name for player in players),
+							((client) ->
+								client.answer = {}
+								for player in players
+									client.answer[player.name] = 'T'
+							),
+							((client, answers) ->
+								for answer_str in answers.split ' '
+									[name, answer] = answer_str.split '='
+									if name of client.answer and (answer == 'C' or answer == 'T')
+										client.answer[name] = answer
+							),
+							callback
+					),
+					((callback) ->
+						for player in players
+							send [player], (
+								for other in players
+									if other != player
+										other.name + '=' + other.answer[player.name]
+							).filter (x) -> x
 
-			for player in players
-				UnionFind.makeSet player
+						for player in players
+							UnionFind.makeSet player
 
-			for a in players
-				for b in players
-					if a != b and a.answer[b.name] == b.answer[a.name] == 'C'
-						UnionFind.union(a, b)
+						for a in players
+							for b in players
+								if a != b and a.answer[b.name] == b.answer[a.name] == 'C'
+									UnionFind.union(a, b)
 
-			async.parallel (UnionFind.components players).map((players) ->
-				(callback) ->
-					players.sort (x, y) -> 0.5 - Math.random()
-					players.sort (x, y) -> x.score - y.score
-
-					Table =
-						TT: 0, TC: 1
-						CT: 3, CC: 5
-
-					bounty = (for a in players
-						(for b in players
-							Table[a.answer[b.name] + b.answer[a.name]]).sum()
-					).sum()
-
-					isLeaderKilled = true
-
-					async.whilst (-> isLeaderKilled), ->
-						send players, 'Pirate'
-						send players[1...], bounty, (player.name for player in players)...
-
-						async.waterfall [
+						async.parallel (UnionFind.components players).map((pirates) ->
 							((callback) ->
-								query [players[0]], [bounty, (player.name for player in players)...],
-									(reset = (client) ->
-										for player, id in players
-											player.share = if id == 0 then bounty else 0
-									),
-									((client, answers) ->
-										for answer_str in answers.split ' '
-											[name, answer] = answer_str.split '='
-											players.forEach (player) ->
-												if player.name == name and isInt +answer
-													player.share = +answer
-										if (player.share for player in players).sum() != bounty
-											reset()
-									),
-									callback
-							),
-							((leader, callback) ->
-								players[0].answer = 'C'
-								query players[1...], (player.name + '=' + player.share for player in players),
-									((client) ->
-										client.answer = 'C'
-									),
-									((client, answer) ->
-										if answer == 'T' or answer == 'C'
-											client.answer = answer
-									),
-									callback
-							),
-							((nonleaders, callback) ->
-								dead = ((if player.answer == 'C' then 1 else 0) for player in players).sum()
-								alive = players.length - dead
+								pirates.sort (x, y) -> 0.5 - Math.random()
+								pirates.sort (x, y) -> y.score - x.score
 
-								isLeaderKilled = dead > alive
-								if isLeaderKilled
-									send [players[0]], 'EndPirate'
-									send [players[0]], 0
-									players = players[1...]
-								else
-									for player in players
-										send [player], 'EndPirate'
-										send [player], player.share
-										player.score += player.share
-							)
-						], callback
-			), callback
-		)
-	]
+								Table =
+									TT: 0, TC: 1
+									CT: 3, CC: 5
+
+								bounty = (for a in pirates
+									(for b in pirates
+										Table[a.answer[b.name] + b.answer[a.name]]).sum()
+								).sum()
+
+								isLeaderKilled = true
+
+								async.whilst (-> isLeaderKilled), ((callback) ->
+									send pirates, 'Pirate'
+									send pirates[1...], bounty, (player.name for player in pirates)...
+
+									async.waterfall [
+										((callback) ->
+											query [pirates[0]], [bounty, (player.name for player in pirates)...],
+												(reset = (client) ->
+													for player, id in pirates
+														player.share = if id == 0 then bounty else 0
+												),
+												((client, answers) ->
+													for answer_str in answers.split ' '
+														[name, answer] = answer_str.split '='
+														pirates.forEach (player) ->
+															if player.name == name and isInt +answer
+																player.share = +answer
+													if (player.share for player in pirates).sum() != bounty
+														reset()
+												),
+												callback
+										),
+										((callback) ->
+											pirates[0].answer = 'C'
+											query pirates[1...], (player.name + '=' + player.share for player in pirates),
+												((client) ->
+													client.answer = 'C'
+												),
+												((client, answer) ->
+													if answer == 'T' or answer == 'C'
+														client.answer = answer
+												),
+												callback
+										),
+										((callback) ->
+											dead = ((if player.answer == 'C' then 1 else 0) for player in pirates).sum()
+											alive = pirates.length - dead
+
+											isLeaderKilled = dead > alive
+											if isLeaderKilled
+												leader = pirates[0]
+												send [leader], 'EndPirate'
+												send [leader], 0
+												pirates = pirates[1...]
+#												players.remove leader
+#												swimming.push leader
+											else
+												for player in pirates
+													send [player], 'EndPirate'
+													send [player], player.share
+													player.score += player.share
+											callback()
+										) # f
+									], callback # waterfall
+								), callback # while
+							) # f
+						), callback # paralell
+					) # f
+				], callback # waterfall
+			), callback # while
+		),
+		((callback) ->
+			send players, 'EndPrisonnier'
+			send players, (player.name + '=' + player.score for player in players)...
+		) # f
+	], # waterfall
+	(callback) ->
+		console.log 'End of the game'
 
 server.listen 1337, '127.0.0.1'
 
-console.log 'server'
+console.log 'Press Enter to Start a Game'
 
 readline = require 'readline'
 rl = readline.createInterface process.stdin, process.stdout
