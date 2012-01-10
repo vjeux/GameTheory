@@ -67,7 +67,7 @@ If the leader doesn't get at least half of the votes, he is thrown overboard and
 
 Once a share is approved, the score of each player increases by the amount agreed upon. The server during startup chose a number of rounds, if we didn't reach it yet, a new Prisoner's game starts over.
 
-At the end, the player with the bigger score wins :)
+At the end, the player with the biggest score wins :)
 
 Example
 =======
