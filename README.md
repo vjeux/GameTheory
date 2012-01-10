@@ -37,7 +37,7 @@ python bots/yourbot.py fooo.fr 1337
 Game
 ====
 
-Phase 1 - [Prionnier Game](http://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
+Phase 1 - [Prisoner's Game](http://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
 ---------
 
 Each player either Betray ```T``` or Cooperate with ```C``` every other player. It can be seen as a nice complete graph like this:
@@ -52,10 +52,10 @@ Within each group, we calculate a bounty. It is the sum of all the internal link
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_3.png" width="380px" />
 
-Phase 2 - [Pirate Game](http://euclid.trentu.ca/math/bz/pirates_gold.pdf)
+Phase 2 - [Pirate's Game](http://euclid.trentu.ca/math/bz/pirates_gold.pdf)
 ------
 
-A Pirate game is started on each group with the previously calculated bounty. Players (now Pirates!) are sorted by score. The one with the biggest score is the Pirate leader. He has to propose a share of the bounty between all the pirates.
+A Pirate's game is started on each group with the previously calculated bounty. Players (now Pirates!) are sorted by score. The one with the biggest score is the Pirate leader. He has to propose a share of the bounty between all the pirates.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_1.png" />
 
@@ -63,9 +63,9 @@ Each pirate vote if he accepts the share or not.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_2.png" />
 
-If the leader doesn't get at least half of the votes, he is thrown overboard and the next pirate on the list is now the leader. The fallen leader has to swim back to the ship and therefore will not participate to the next Prisonnier Game.
+If the leader doesn't get at least half of the votes, he is thrown overboard and the next pirate on the list is now the leader. The fallen leader has to swim back to the ship and therefore will not participate to the next Prisoner's game.
 
-Once a share is approved, the score of each player increases by the amount agreed upon. Then, a new Prisonnier game starts over.
+Once a share is approved, the score of each player increases by the amount agreed upon. Then, a new Prisoner's game starts over.
 
 
 Example
@@ -80,7 +80,7 @@ Example
 > Vjeux    # We send our player name
 < Vjeux-0  # We receive a unique player name
 
-< Prisonnier # Let's start a Prisonnier round
+< Prisoner # Let's start a Prisoner round
 < Vjeux-0 Gauth-1 Felix-2 # We receive the list of players
 > Gauth-1=C Felix-2=C # We send our decision about all the players
 < Gauth-1=T Felix-2=C # We receive the decision of all the players about us
@@ -97,7 +97,7 @@ Example
 < EndPirate
 < 30 # We win the full bounty!
 
-< Prisonnier # Another round of Prisonnier
+< Prisoner # Another round of Prisoner
 < Vjeux-0 Felix-2 # Gauth-1 has been kicked for a round
 > Felix-2=T # We betray Felix-2
 < Felix-2=T # He betrays us too
@@ -105,7 +105,7 @@ Example
 < EndPirate # There is no Pirate round since we are alone in our group.
 < 0 # We receive a bounty of 0.
 
-< EndPrisonnier # There was only 2 Prisonnier round
+< EndPrisoner # There was only 2 Prisoner round
 < Vjeux-0=30 Felix-2=0 Gauth-1=0 # We receive the scores of everyone
 ```
 
@@ -116,7 +116,7 @@ Messages
 * Multiple arguments are space separated and key-values are separated by an ```=``` character.
 * If you send a non-valid message, timeout, disconnect... You are going to get assigned a default value.
   * **Name**: ```Unnammed```.
-  * **Prisonnier**: You betray ```T``` everyone by default.
+  * **Prisoner**: You betray ```T``` everyone by default.
   * **Pirate-Leader**: You give all the bounty to yourself, nothing for the others.
   * **Pirate-Non-Leader**: You cooperate ```C``` with the leader.
 
