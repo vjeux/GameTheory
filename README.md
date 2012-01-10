@@ -44,7 +44,7 @@ Each player either Betray ```T``` or Cooperate with ```C``` every other player. 
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_1.png" width="400px" />
 
-Those links are used to group players together. We discard every relation but both-sides cooperation ```CC``` and connected components are forming groups.
+Those links are used to group players together. We discard every relation but both-sides cooperation ```CC```. Each connected component is a group.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_2.png" width="380px" />
 
