@@ -59,7 +59,7 @@ A Pirate's game is started on each group with the previously calculated bounty. 
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_1.png" />
 
-Each pirate vote if he accepts the share or not.
+Each pirate votes to accept the share or not.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_2.png" />
 
