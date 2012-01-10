@@ -40,11 +40,11 @@ Game
 Phase 1 - [Prionnier Game](http://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
 ---------
 
-Every player says either Betray ```T``` or Cooperate ```C``` to every other player. It can be seen as a nice complete graph like this:
+Each player either Betray ```T``` or Cooperate with ```C``` every other player. It can be seen as a nice complete graph like this:
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_1.png" width="400px" />
 
-Those links are used to group players together. We discard every relation but both-sides cooperation ```CC``` and groups are connected components.
+Those links are used to group players together. We discard every relation but both-sides cooperation ```CC``` and connected components are forming groups.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_2.png" width="380px" />
 
