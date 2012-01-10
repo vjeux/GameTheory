@@ -65,7 +65,9 @@ Each pirate vote if he accepts the share or not.
 
 If the leader doesn't get at least half of the votes, he is thrown overboard and the next pirate on the list is now the leader. The fallen leader has to swim back to the ship and therefore will not participate to the next Prisoner's game.
 
-Once a share is approved, the score of each player increases by the amount agreed upon. Then, a new Prisoner's game starts over.
+Once a share is approved, the score of each player increases by the amount agreed upon.
+
+The server during startup chose a number of rounds, if we didn't reach it yet, a new Prisoner's game starts over.
 
 
 Example
