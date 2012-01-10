@@ -34,6 +34,40 @@ Test your bot against the others (ping me if the server isn't up):
 python bots/yourbot.py fooo.fr 1337
 ```
 
+Game
+====
+
+Phase 1 - [Prionnier Game](http://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
+---------
+
+Every player says either Betray ```T``` or Cooperate ```C``` to every other player. It can be seen as a nice complete graph like this:
+
+<img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_1.png" width="400px" />
+
+Those links are used to group players together. We discard every relation but both-sides cooperation ```CC``` and groups are connected components.
+
+<img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_2.png" width="380px" />
+
+Finally, withing each group, we calculate a bounty. It is the sum of all the internal links costs: ```CC``` = 10, ```TC``` = 4 and ```CC``` = 1.
+
+<img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_3.png" width="380px" />
+
+Phase 2 - [Pirate Game](http://euclid.trentu.ca/math/bz/pirates_gold.pdf)
+------
+
+A Pirate game is started on each group with the previously calculated bounty. Players (now Pirates!) are sorted by score. The one with the biggest score is the Pirate leader. He has to propose a share of the bounty between all the pirates.
+
+<img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_1.png" />
+
+Then all the pirates vote if they accept the share or not.
+
+<img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_2.png" />
+
+If the leader doesn't get at least half of the votes, he is thrown overboard and the next pirate on the list is now the leader. The ex-leader has to swim back to the ship and therefore will not participate to the next Prisonnier Game.
+
+Once a share is approved, the score of each player increases by the amount agreed upon. Then, a new Prisonnier game starts over.
+
+
 Example
 =======
 
