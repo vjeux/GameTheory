@@ -47,7 +47,7 @@ while 1:
 	myself = readString()
 
 	# Prisonnier Game
-	while readString() == 'Prisonnier':
+	while readString() == 'Prisoner':
 
 		# Receive Players
 		players = readArray()

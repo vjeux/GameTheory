@@ -84,7 +84,7 @@ game = ->
 			async.whilst (-> rounds-- > 0), ((callback) ->
 				async.waterfall [
 					((callback) ->
-						send players, ['Prisonnier']
+						send players, ['Prisoner']
 						query players, (player.name for player in players),
 							((client) ->
 								client.answer = {}
@@ -195,7 +195,7 @@ game = ->
 		),
 		((callback) ->
 			players = all_players.concat()
-			send players, 'EndPrisonnier'
+			send players, 'EndPrisoner'
 			send players, (player.name + '=' + player.score for player in players)...
 			inGame = false
 		) # f
