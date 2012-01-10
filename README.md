@@ -48,7 +48,7 @@ Those links are used to group players together. We discard every relation but bo
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_2.png" width="380px" />
 
-Finally, withing each group, we calculate a bounty. It is the sum of all the internal links costs: ```CC``` = 10, ```TC``` = 4 and ```CC``` = 1.
+Within each group, we calculate a bounty. It is the sum of all the internal links costs: ```CC``` = 10, ```TC``` = 4 and ```CC``` = 1.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_3.png" width="380px" />
 
