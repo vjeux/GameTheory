@@ -59,11 +59,11 @@ A Pirate game is started on each group with the previously calculated bounty. Pl
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_1.png" />
 
-Then all the pirates vote if they accept the share or not.
+Each pirate vote if he accepts the share or not.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/pirate_2.png" />
 
-If the leader doesn't get at least half of the votes, he is thrown overboard and the next pirate on the list is now the leader. The ex-leader has to swim back to the ship and therefore will not participate to the next Prisonnier Game.
+If the leader doesn't get at least half of the votes, he is thrown overboard and the next pirate on the list is now the leader. The fallen leader has to swim back to the ship and therefore will not participate to the next Prisonnier Game.
 
 Once a share is approved, the score of each player increases by the amount agreed upon. Then, a new Prisonnier game starts over.
 
