@@ -2,14 +2,15 @@
 require 'fiber'
 require 'rubygems'
 require 'cool.io'
+require 'ostruct'
 
 # Asynchronous utilities for Yield
 # https://github.com/eligrey/async.js
 
-async = lambda { |fn|
-	return lambda { |*args|
+async = ->(fn) {
+	return ->(*args) {
 		gen = fn[*args]
-		callback = lambda { ||
+		callback = -> {
 			if not gen.nil?
 				descriptor = gen.resume()
 				if not descriptor.nil?
@@ -21,47 +22,46 @@ async = lambda { |fn|
 	}
 }
 
-to = lambda { |func, *args|
+to = ->(func, *args) {
 	return [
-		lambda { |*args, callback|
+		->(*args, callback) {
 			async[func][*args, callback]
 		},
 		args
 	]
 }
 
-
 # Listener Utilities
 
 listeners = {}
-listeners.default_proc = lambda { |hash, key|
+listeners.default_proc = ->(hash, key) {
 	h = {}
-	h.default_proc = lambda { |hash, key|
+	h.default_proc = ->(hash, key) {
 		hash[key] = []
 	}
 	hash[key] = h;
 }
 
-Listener_call = lambda { |key, type, *data|
+Listener_call = ->(key, type, *data) {
 	listeners[key][type].each { |listener|
 		listener[*data]
 	}
 }
 
-Listener_remove = lambda { |key, type, listener|
+Listener_remove = ->(key, type, listener) {
 	listeners[key][type].delete(listener)
 }
 
-Listener_removeAll = lambda { |key, type|
+Listener_removeAll = ->(key, type) {
 	listeners[key].delete(type)
 }
 
-Listener_add = lambda { |key, type, listener|
+Listener_add = ->(key, type, listener) {
 	listeners[key][type] << listener
 }
 
-Listener_once = lambda { |key, type, callback|
-	listener = lambda { |data|
+Listener_once = ->(key, type, callback) {
+	listener = ->(data) {
 		callback[data]
 		Listener_remove[key, type, listener]
 	}
@@ -70,7 +70,7 @@ Listener_once = lambda { |key, type, callback|
 
 # Server wrapper using Listeners
 
-createServer = lambda { |addr, port, callback|
+createServer = ->(addr, port, callback) {
 	cool.io.server addr, port do
 		on_connect do
 			callback[self]
@@ -87,21 +87,21 @@ createServer = lambda { |addr, port, callback|
 
 # Broadcast and query utilities
 
-send = lambda { |clients, *msg|
+send = ->(clients, *msg) {
 	msg = msg.join(' ')
 	puts "> #{msg}"
 	clients.each { |client|
-		client['socket'].write msg + "\r\n"
+		client.socket.write msg + "\r\n"
 	}
 }
 
-query = lambda { |clients, msg, update, callback|
+query = ->(clients, msg, update, callback) {
 	msg = msg.join(' ')
 	puts "> #{msg}"
 
 	n = clients.length
 
-	answer = lambda {
+	answer = -> {
 		n -= 1
 		if n == 0
 			callback[]
@@ -109,14 +109,14 @@ query = lambda { |clients, msg, update, callback|
 	}
 
 	clients.each { |client|
-		Listener_once[client['socket'], 'data', lambda { |data|
+		Listener_once[client.socket, 'data', ->(data) {
 			data = data.slice(0, data.length - 2)
 			puts "< #{data}"
 			update[client, data]
 			answer[]
 		}]
 
-		client['socket'].write msg + "\r\n"
+		client.socket.write msg + "\r\n"
 	}
 
 	return nil
@@ -124,18 +124,22 @@ query = lambda { |clients, msg, update, callback|
 
 # Game code
 
-game = async[lambda {
+
+client_id = 0
+clients = []
+
+game = async[-> {
 	Fiber.new {
 		players = clients
 
 		clients.each { |client|
-			client['name'] = "Unnamed-#{client['id']}"
-			client['score'] = 0
+			client.name = "Unnamed-#{client.id}"
+			client.score = 0
 		}
 
-		Fiber.yield to[query, players, ['Start'], lambda { |client, name|
-			client['name'] = "#{name}-#{client['id']}"
-			send[[client], client['name']]
+		Fiber.yield to[query, players, ['Start'], ->(client, name) {
+			client.name = "#{name}-#{client.id}"
+			send[[client], client.name]
 		}]
 		puts "Synchronized!"
 	}
@@ -146,13 +150,11 @@ ADDR = '127.0.0.1'
 PORT = 1337
 
 
-client_id = 0
-clients = []
 
-createServer[ADDR, PORT, lambda { |socket|
-	client = {"id" => client_id, "socket" => socket, "alive" => true}
+createServer[ADDR, PORT, ->(socket) {
+	client = OpenStruct.new({"id" => client_id, "socket" => socket, "alive" => true})
 	client_id += 1
-	Listener_add[socket, 'close', lambda {
+	Listener_add[socket, 'close', -> {
 		client['alive'] = false
 	}]
 	clients << client
