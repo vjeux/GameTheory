@@ -3,9 +3,35 @@ require 'fiber'
 require 'rubygems'
 require 'cool.io'
 
-ADDR = '127.0.0.1'
-PORT = 1337
+# Asynchronous utilities for Yield
+# https://github.com/eligrey/async.js
 
+async = lambda { |fn|
+	return lambda { |*args|
+		gen = fn[*args]
+		callback = lambda { ||
+			if not gen.nil?
+				descriptor = gen.resume()
+				if not descriptor.nil?
+					descriptor[0][*descriptor[1], callback]
+				end
+			end
+		}
+		callback[]
+	}
+}
+
+to = lambda { |func, *args|
+	return [
+		lambda { |*args, callback|
+			async[func][*args, callback]
+		},
+		args
+	]
+}
+
+
+# Listener Utilities
 
 listeners = {}
 listeners.default_proc = lambda { |hash, key|
@@ -16,9 +42,9 @@ listeners.default_proc = lambda { |hash, key|
 	hash[key] = h;
 }
 
-Listener_call = lambda { |key, type, data|
+Listener_call = lambda { |key, type, *data|
 	listeners[key][type].each { |listener|
-		listener[data]
+		listener[*data]
 	}
 }
 
@@ -42,9 +68,7 @@ Listener_once = lambda { |key, type, callback|
 	listeners[key][type] << listener
 }
 
-
-client_id = 0
-clients = []
+# Server wrapper using Listeners
 
 createServer = lambda { |addr, port, callback|
 	cool.io.server addr, port do
@@ -61,6 +85,8 @@ createServer = lambda { |addr, port, callback|
 	cool.io.run
 }
 
+# Broadcast and query utilities
+
 send = lambda { |clients, *msg|
 	msg = msg.join(' ')
 	puts "> #{msg}"
@@ -69,60 +95,59 @@ send = lambda { |clients, *msg|
 	}
 }
 
-root_fiber = Fiber.current
+query = lambda { |clients, msg, update, callback|
+	msg = msg.join(' ')
+	puts "> #{msg}"
 
-query = lambda { |clients, msg, init, update, callback|
+	n = clients.length
 
-	f = Fiber.new {
-		msg = msg.join(' ')
-		puts "> #{msg}"
+	answer = lambda {
+		n -= 1
+		if n == 0
+			callback[]
+		end
+	}
 
-		n = clients.length
+	clients.each { |client|
+		Listener_once[client['socket'], 'data', lambda { |data|
+			data = data.slice(0, data.length - 2)
+			puts "< #{data}"
+			update[client, data]
+			answer[]
+		}]
 
-		answer = lambda {
-			n -= 1
-			if n == 0
-				Fiber.yield
-			end
-		}
+		client['socket'].write msg + "\r\n"
+	}
+
+	return nil
+}
+
+# Game code
+
+game = async[lambda {
+	Fiber.new {
+		players = clients
 
 		clients.each { |client|
-			init[client]
-
-			Listener_once[client['socket'], 'data', lambda { |data|
-				data = data.slice(0, data.length - 2)
-				puts "< #{data}"
-				update[client, data]
-				f.resume
-				answer[]
-			}]
-
-			client['socket'].write msg + "\r\n"
-		}
-	}
-	f.resume
-}
-
-
-game = lambda {
-	players = clients
-
-	query[players, ['Start'],
-		lambda { |client|
 			client['name'] = "Unnamed-#{client['id']}"
 			client['score'] = 0
-		},
-		lambda { |client, name|
-			client['name'] = "#{name}-#{client['id']}"
-			send[[client], client['name']]
-		},
-		lambda {
-			puts "End!"
 		}
-	]
-	puts "End2"
-}
 
+		Fiber.yield to[query, players, ['Start'], lambda { |client, name|
+				client['name'] = "#{name}-#{client['id']}"
+				send[[client], client['name']]
+		}]
+		puts "Synchronized!"
+	}
+}]
+
+
+ADDR = '127.0.0.1'
+PORT = 1337
+
+
+client_id = 0
+clients = []
 
 createServer[ADDR, PORT, lambda { |socket|
 	client = {"id" => client_id, "socket" => socket, "alive" => true}
