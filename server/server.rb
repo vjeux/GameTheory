@@ -134,8 +134,8 @@ game = async[lambda {
 		}
 
 		Fiber.yield to[query, players, ['Start'], lambda { |client, name|
-				client['name'] = "#{name}-#{client['id']}"
-				send[[client], client['name']]
+			client['name'] = "#{name}-#{client['id']}"
+			send[[client], client['name']]
 		}]
 		puts "Synchronized!"
 	}
