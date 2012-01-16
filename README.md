@@ -16,7 +16,7 @@ sudo npm install -g coffee-script
 
 # Code + Dependencies
 git clone git://github.com/vjeux/GameTheory.git
-cd GameTheory/server
+cd GameTheory/server/coffee
 npm install async sugar
 cd ..
 ```
@@ -48,7 +48,7 @@ Those links are used to group players together. We discard every relation but bo
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_2.png" width="380px" />
 
-Within each group, we calculate a bounty. It is the sum of all the internal links costs: ```CC``` = 10, ```TC``` = 4 and ```TT``` = 1.
+Within each group, we calculate a bounty. It is the sum of all the internal links costs: ```CC``` = 0, ```TC``` = 4 and ```TT``` = 10.
 
 <img src="http://fooo.fr/~vjeux/epita/game-theory/images/prionnier_3.png" width="380px" />
 
