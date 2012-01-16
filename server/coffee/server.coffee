@@ -123,8 +123,8 @@ game = ->
 								pirates.sort (x, y) -> y.score - x.score
 
 								Table =
-									TT: 0, TC: 1
-									CT: 3, CC: 5
+									CC: 0, TC: 1
+									CT: 3, TT: 5
 
 								bounty = (for a in pirates
 									(for b in pirates
