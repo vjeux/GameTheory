@@ -177,7 +177,8 @@ game = ->
 												send [leader], 'EndPirate'
 												send [leader], 0
 												pirates = pirates[1...]
-												players.remove leader
+												players.splice players.indexOf(leader), 1
+#												players.remove leader
 											else
 												for player in pirates
 													send [player], 'EndPirate'
