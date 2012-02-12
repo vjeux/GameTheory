@@ -148,7 +148,7 @@ game = ->
 													for answer_str in answers.split ' '
 														[name, answer] = answer_str.split '='
 														pirates.forEach (player) ->
-															if player.name == name and isInt +answer
+															if player.name == name and isInt +answer and +answer >= 0
 																player.share = +answer
 													if (player.share for player in pirates).sum() != bounty
 														reset()
