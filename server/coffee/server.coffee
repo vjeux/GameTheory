@@ -129,9 +129,9 @@ game = ->
 								bounty = (for a in pirates
 									(for b in pirates
 										if a != b
-											Table[a.answer[b.name] + b.answer[a.name]]).sum()
+											Table[a.answer[b.name] + b.answer[a.name]]
 										else
-											0
+											0).sum()
 								).sum()
 
 								isLeaderKilled = true
@@ -151,7 +151,7 @@ game = ->
 													for answer_str in answers.split ' '
 														[name, answer] = answer_str.split '='
 														pirates.forEach (player) ->
-															if player.name == name and isInt +answer and +answer >= 0
+															if player.name == name and isInt +answer
 																player.share = +answer
 													if (player.share for player in pirates).sum() != bounty
 														reset()
@@ -180,8 +180,7 @@ game = ->
 												send [leader], 'EndPirate'
 												send [leader], 0
 												pirates = pirates[1...]
-												players.splice players.indexOf(leader), 1
-#												players.remove leader
+												players.remove leader
 											else
 												for player in pirates
 													send [player], 'EndPirate'
