@@ -128,7 +128,10 @@ game = ->
 
 								bounty = (for a in pirates
 									(for b in pirates
-										Table[a.answer[b.name] + b.answer[a.name]]).sum()
+										if a != b
+											Table[a.answer[b.name] + b.answer[a.name]]).sum()
+										else
+											0
 								).sum()
 
 								isLeaderKilled = true
