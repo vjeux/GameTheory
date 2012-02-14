@@ -30,7 +30,7 @@ query = (clients, msg, init, update, callback) ->
 	t = setTimeout send, 1000
 	n = clients.filter((client) -> client.alive).length
 	answer = ->
-		if --n == 0
+		if --n < 0
 			send()
 
 	clients.forEach (client) ->
@@ -47,6 +47,8 @@ query = (clients, msg, init, update, callback) ->
 				answer()
 
 			client.socket.write msg + '\r\n'
+
+	answer()
 
 ids = (clients) ->
 	'(' + clients.join(', ') + ')'
