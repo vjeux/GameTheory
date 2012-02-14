@@ -18,10 +18,10 @@ while [ -n "$1" ]; do
 done
 
 if [ "$n" -eq 0 ]; then
-	coffee server/server.coffee
+	coffee server/coffee/server.coffee
 else
 	sleep 1 && echo "Press Enter to Start a Game!" &
-	coffee server/server.coffee > 0.log 2>&1
+	coffee server/coffee/server.coffee > 0.log 2>&1
 fi	
 
 wait
